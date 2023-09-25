@@ -2,6 +2,7 @@ package com.example.laboratorio4.navegacion
 
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -20,7 +21,10 @@ import com.example.laboratorio4.ui1.favorites.PantallaFavoritos
 import com.example.laboratorio4.ui1.places.EventoConLugar
 import com.example.laboratorio4.ui1.places.ListaDeEventos
 import com.example.laboratorio4.ui1.profile.Pantalla
+import com.example.laboratorio4.navegacion.PantallaLogin
 
+
+@ExperimentalMaterial3Api
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -41,7 +45,10 @@ fun Navigation() {
     )
     val selectedTabIndex = remember { mutableStateOf(0) }
 
-    NavHost(navController, startDestination = "tabs") {
+    NavHost(navController, startDestination = "login") {
+        composable("login") {
+            PantallaLogin(navController)
+        }
         composable("tabs") {
             Column {
                 TabRow(selectedTabIndex = selectedTabIndex.value) {
@@ -63,8 +70,8 @@ fun Navigation() {
                     0 -> PrimeraPantalla(eventosFavoritos, todosLosEventos) { evento ->
                         navController.navigate("detalleEvento/${evento.titulo}/${evento.descripcion}")
                     }
-                    1 -> ListaDeEventos(eventos) // Tu implementación para MainActivity2
-                    2 -> Pantalla() // Tu implementación para MainActivity4
+                    1 -> ListaDeEventos(eventos) //  implementación para MainActivity2
+                    2 -> Pantalla() //  implementación para MainActivity4
                     3 -> PantallaFavoritos(eventosFavoritos)  // Implementación para MainActivity5
                 }
             }
