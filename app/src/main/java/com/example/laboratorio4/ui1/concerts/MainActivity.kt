@@ -1,4 +1,4 @@
-package com.example.laboratorio4
+package com.example.laboratorio4.ui1.concerts
 /**
  * Nombre: Sofía Mishell Velasquez
  * Carnet: 22049
@@ -8,6 +8,7 @@ package com.example.laboratorio4
  * Descripción: aplicación que muestra un recetario con imagen, se puede agregar nuevas recetas, eliminar recetas y no se pueden repetir
  */
 import android.os.Bundle
+import com.example.laboratorio4.navegacion.Navigation
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,24 +33,29 @@ import coil.compose.rememberImagePainter
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.navigation.compose.rememberNavController
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Laboratorio4Theme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    Navigation()
                 }
             }
         }
     }
 }
+
 data class Evento(val titulo: String, val urlImagen: String, val descripcion: String)
 @Composable
-fun PrimeraPantalla(eventosFavoritos: List<Evento>, todosLosEventos: List<Evento>) {
+fun PrimeraPantalla(eventosFavoritos: List<Evento>, todosLosEventos: List<Evento>, navigateToDetail: (Evento) -> Unit) {
+    val navController = rememberNavController()
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -77,7 +83,10 @@ fun PrimeraPantalla(eventosFavoritos: List<Evento>, todosLosEventos: List<Evento
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(rowItems) { evento ->
-                    EventoCard(evento)
+                    EventoCard(evento) {
+                        navigateToDetail(evento)
+                    }
+
                 }
             }
         }
@@ -93,7 +102,9 @@ fun PrimeraPantalla(eventosFavoritos: List<Evento>, todosLosEventos: List<Evento
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(rowItems) { evento ->
-                    EventoCard(evento)
+                    EventoCard(evento) {
+                        navigateToDetail(evento)
+                    }
                 }
             }
         }
@@ -101,12 +112,13 @@ fun PrimeraPantalla(eventosFavoritos: List<Evento>, todosLosEventos: List<Evento
 }
 
 @Composable
-fun EventoCard(evento: Evento) {
+fun EventoCard(evento: Evento, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .width(150.dp)
-            .fillMaxHeight(),
+            .fillMaxHeight()
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(8.dp)  // Esquinas redondeadas para la tarjeta
     ) {
         Column(
@@ -143,5 +155,5 @@ fun GreetingPreview() {
         Evento("Yoga class Free", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCTUCtSz7eQkH_gt6IztcdFvgUt7y0FjnGim3_-h71Lw&s=10", "sáb, 2 sept, 10:00\n" + "Dentro De 3 Días\n" + "Cdad. de Guatemala"),
         Evento("Evolutionary Astrology — Biomechanics for Joint Health", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjXzblWme1ymBFdYMOqIWgdZ5CDDG16Vn2LkFfzIoXJg&s=10", "vie, 1 sept, 15:00–20:00")
     )
-    PrimeraPantalla(eventosFavoritos, todosLosEventos)
+  //  PrimeraPantalla(eventosFavoritos, todosLosEventos)
 }
